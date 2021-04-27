@@ -1,4 +1,4 @@
-
+---
 - name: create a client cert
   run_once: true
   delegate_to: "{{ docker_remote_client_host }}"
@@ -37,4 +37,3 @@
   run_once: true
   delegate_to: "{{ docker_remote_client_host }}"
   when: docker_remote_client_use_certs_as_default
-

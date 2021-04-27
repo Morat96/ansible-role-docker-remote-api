@@ -1,4 +1,4 @@
-
+---
 - hosts: node-1:managers:workers
   strategy: free
   roles:

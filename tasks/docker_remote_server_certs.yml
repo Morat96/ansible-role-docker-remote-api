@@ -1,4 +1,4 @@
-
+---
 - name: check if container is present
   become: "{{ docker_remote_client_become }}"
   shell: docker ps -a | grep "{{ docker_remote_server_image_name }}"
@@ -22,14 +22,14 @@
   register: create_server_cert_result
   changed_when: create_server_cert_result.stdout_lines | length > 0
 
-- debug:
+- name: Check if the container is already deployed
+  debug:
     msg: container should be deployed
   register: deploy_container
   changed_when: >
     (container_absent_result.rc | bool)
     or create_server_cert_result.changed
     or docker_remote_server_force_deploy
-
 - name: create a server image
   block:
     - name: copy ca cert to build
@@ -160,9 +160,9 @@
          --name "{{ docker_remote_server_image_name }}"
          -v /var/run/docker.sock:/var/run/docker.sock
          -p "{{ docker_remote_server_api_port }}:2376"
+         --restart always
          -d
          "{{ docker_remote_server_image_name }}"
-
     - name: clean up old images
       become: true
       command: docker rmi "{{ item }}"
@@ -181,4 +181,3 @@
     - "{{ docker_remote_certs_server_path }}/Dockerfile"
     - "{{ docker_remote_certs_server_path }}/ca.pem"
     - "{{ docker_remote_certs_server_path }}/{{ docker_remote_server_image_name }}.tar"
-

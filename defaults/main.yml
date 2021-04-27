@@ -1,4 +1,4 @@
-
+---
 # client used to build images and access docker remotely
 docker_remote_client_host: localhost
 
@@ -48,4 +48,3 @@ docker_remote_certs_server_additional_subjects: []
 
 # image for certificate creation
 docker_remote_certs_image: bessonov/docker-remote-api-certs:0.0.1
-
