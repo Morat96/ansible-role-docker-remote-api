@@ -55,12 +55,12 @@
     - name: build server image
       delegate_to: "{{ docker_remote_client_host }}"
       become: "{{ docker_remote_client_become }}"
-      command: docker build -t "{{ docker_remote_server_image_name }}" "{{ docker_remote_certs_server_path_abs }}"
+      shell: docker build -t "{{ docker_remote_server_image_name }}" "{{ docker_remote_certs_server_path_abs }}"
 
     - name: save server image
       delegate_to: "{{ docker_remote_client_host }}"
       become: "{{ docker_remote_client_become }}"
-      command: docker save --output "{{ docker_remote_certs_server_path_abs }}/{{ docker_remote_server_image_name }}.tar" "{{ docker_remote_server_image_name }}"
+      shell: docker save --output "{{ docker_remote_certs_server_path_abs }}/{{ docker_remote_server_image_name }}.tar" "{{ docker_remote_server_image_name }}"
 
     - name: fix permissions of saved image
       delegate_to: "{{ docker_remote_client_host }}"
@@ -72,7 +72,7 @@
     - name: remove server image
       delegate_to: "{{ docker_remote_client_host }}"
       become: "{{ docker_remote_client_become }}"
-      command: docker rmi "{{ docker_remote_server_image_name }}"
+      shell: docker rmi "{{ docker_remote_server_image_name }}"
 
   when: deploy_container.changed
 
@@ -135,7 +135,7 @@
   block:
     - name: store old images
       become: true
-      command: docker images --filter reference="{{ docker_remote_server_image_name }}" --format "{% raw %}"{{ .ID }}"{% endraw %}"
+      command: docker images --filter reference="{{ docker_remote_server_image_name }}" --format "{% raw %}"{{.ID}}"{% endraw %}"
       register: store_old_images_result
 
     - name: import image
